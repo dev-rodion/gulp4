@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/dev-rodion/gulp4#readme",
   "devDependencies": {
-    "gulp": "^4.0.2"
+    "gulp": "^4.0.2",
+    "gulp-sass": "^5.0.0",
+    "sass": "^1.43.5"
   }
 }
