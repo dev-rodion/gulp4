@@ -1,0 +1,22 @@
+{
+  "name": "gulp4",
+  "version": "1.0.0",
+  "description": "Building Gulp 4 for a convenient and fast site layout",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dev-rodion/gulp4.git"
+  },
+  "author": "Dev Rodion",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dev-rodion/gulp4/issues"
+  },
+  "homepage": "https://github.com/dev-rodion/gulp4#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2"
+  }
+}
