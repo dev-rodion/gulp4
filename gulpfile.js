@@ -3,14 +3,14 @@ const { src, dest } = require("gulp");
 // dest is a function to send file to given directory
 
 const sass = require("gulp-sass")(require("sass")); // gulp-sass is a plugin to convert scss to css; sass is a required plugin
+const concat = require("gulp-concat"); // gulp-concat is a plugin to concatenate files (can rename files)
 
 function styles() {
   return src("app/scss/style.scss") // finds style.scss filee in app/scss/ directory
-    .pipe(sass({
-        // converts scss to css
+    .pipe(sass({// converts scss to css
         outputStyle: "compressed", // compress css to one line
     }))
-    .pipe()
+    .pipe(concat('style.min.css')) // concatenates the files and sets the filename 
     .pipe(dest("app/css")); // sends file to app/css directory
 }
 
