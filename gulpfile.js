@@ -6,7 +6,8 @@ const { src, dest, watch, parallel } = require("gulp");
 
 const sass = require("gulp-sass")(require("sass")); // gulp-sass is a plugin to convert scss to css; sass is a required plugin
 const concat = require("gulp-concat"); // gulp-concat is a plugin to concatenate files (can rename files)
-const browserSync = require('browser-sync').create(); // browser-sync is a plugin to create localhost and update the project in real time
+const browserSync = require('browser-sync').create(); // browser-sync is a plugin to create localhost and refresh the browser page in real time
+const uglify = require('gulp-uglify-es').default; // gulp-urglify-es is a plugin to uglify javascript code 
 
 function initBrowserSync () {
   browserSync.init({ // initializes localhost
@@ -17,24 +18,34 @@ function initBrowserSync () {
 }
 
 function styles() {
-  return src("app/scss/style.scss") // finds style.scss filee in app/scss/ directory
+  return src(["app/scss/style.scss"]) // finds and selects files
     .pipe(sass({// converts scss to css
         outputStyle: "compressed", // compress css to one line
     }))
     .pipe(concat('style.min.css')) // concatenates the files and sets the filename 
     .pipe(dest("app/css")) // sends file to app/css directory
-    .pipe(browserSync.stream()) // re
+    .pipe(browserSync.stream()) // refreshes the browser page
+}
+
+function scripts() {
+  return src(['app/js/main.js']) // finds and selects files
+  .pipe(concat('script.min.js')) // concatenates the js files and sets the filename
+  .pipe(uglify()) // uglifies js code
+  .pipe(dest('app/js/')) // sends file to app/js directory
+  .pipe(browserSync.stream()) // refreshes the browser page
 }
 
 function watching() {
   watch(['app/scss/**/*.scss'],styles); // calls the styles function when scss files change in app/scss directory 
-  watch(['app/*.html']).on('change', browserSync.reload); // reloads the browser page when HTML files change
+  watch(['app/js/main.js'],scripts); // calls the scripts function when main.js file change in app/js directory 
+  watch(['app/*.html']).on('change', browserSync.reload); // refreshes the browser page when HTML files change
 }
 
 // adds the ability to use the function by keyword (gulp *keyword*)
 exports.styles = styles; 
 exports.watching = watching; 
 exports.initBrowserSync = initBrowserSync; 
+exports.scripts = scripts; 
 
 // adds the ability to use the function by "gulp" keyword (gulp)
-exports.default = parallel(initBrowserSync, watching) // calls function in parallel
+exports.default = parallel(scripts,initBrowserSync, watching) // calls function in parallel
