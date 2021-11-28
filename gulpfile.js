@@ -9,6 +9,7 @@ const concat = require("gulp-concat"); // gulp-concat is a plugin to concatenate
 const browserSync = require('browser-sync').create(); // browser-sync is a plugin to create localhost and refresh the browser page in real time
 const uglify = require('gulp-uglify-es').default; // gulp-urglify-es is a plugin to uglify javascript code 
 const autoprefixer = require('gulp-autoprefixer'); // gulp-autoprefixer is a plugin to add css prefixes for old browsers 
+const imagemin = require('gulp-imagemin'); // gulp-imagemin is a plugin to minify png, jpeg, gif and svg images
 
 function initBrowserSync () {
   browserSync.init({ // initializes localhost
@@ -40,6 +41,22 @@ function scripts() {
   .pipe(browserSync.stream()) // refreshes the browser page
 }
 
+function images() { 
+  return src(['app/images/**/*']) // finds and selects images
+  .pipe(imagemin([ // minifies images
+    imagemin.gifsicle({interlaced: true}), // gif minifig options
+    imagemin.mozjpeg({quality: 75, progressive: true}), // jpeg minifig options
+    imagemin.optipng({optimizationLevel: 5}), // png minifig options
+    imagemin.svgo({ // svg minifig options
+      plugins: [
+        {removeViewBox: true},
+        {cleanupIDs: false}
+      ]
+    })
+  ]))
+  .pipe(dest('dist/images'))
+ }
+
 function watching() {
   watch(['app/scss/**/*.scss'],styles); // calls the styles function when scss files change in app/scss directory 
   watch(['app/js/main.js'],scripts); // calls the scripts function when main.js file change in app/js directory 
@@ -51,6 +68,7 @@ exports.styles = styles;
 exports.watching = watching; 
 exports.initBrowserSync = initBrowserSync; 
 exports.scripts = scripts; 
+exports.images = images; 
 
 // adds the ability to use the function by "gulp" keyword (gulp)
 exports.default = parallel(scripts,initBrowserSync, watching) // calls function in parallel
