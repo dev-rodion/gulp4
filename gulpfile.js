@@ -8,6 +8,7 @@ const sass = require("gulp-sass")(require("sass")); // gulp-sass is a plugin to 
 const concat = require("gulp-concat"); // gulp-concat is a plugin to concatenate files (can rename files)
 const browserSync = require('browser-sync').create(); // browser-sync is a plugin to create localhost and refresh the browser page in real time
 const uglify = require('gulp-uglify-es').default; // gulp-urglify-es is a plugin to uglify javascript code 
+const autoprefixer = require('gulp-autoprefixer'); // gulp-autoprefixer is a plugin to add css prefixes for old browsers 
 
 function initBrowserSync () {
   browserSync.init({ // initializes localhost
@@ -23,6 +24,10 @@ function styles() {
         outputStyle: "compressed", // compress css to one line
     }))
     .pipe(concat('style.min.css')) // concatenates the files and sets the filename 
+    .pipe(autoprefixer({ // adds css prefixes for old browsers
+      grid: 'autoplace', // adds IE 10-11 prefixes for grid layout properties
+      overrideBrowserslist: ["last 10 version"] // adds css prefixes for the latest 10 versions in every browser
+    }))  
     .pipe(dest("app/css")) // sends file to app/css directory
     .pipe(browserSync.stream()) // refreshes the browser page
 }
