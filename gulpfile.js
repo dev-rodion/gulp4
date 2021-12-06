@@ -12,13 +12,19 @@ const uglify = require("gulp-uglify-es").default; // gulp-urglify-es is a plugin
 const autoprefixer = require("gulp-autoprefixer"); // gulp-autoprefixer is a plugin to add css prefixes for old browsers
 const imagemin = require("gulp-imagemin"); // gulp-imagemin is a plugin to minify png, jpeg, gif and svg images
 const del = require("del"); // del is a plugin to delete files or directories
+const {htmlValidator} = require("gulp-w3c-html-validator")
 
 function initBrowserSync() {
-  browserSync.init({
-    // initializes localhost
+  browserSync.init({ // initializes localhost
     server: { // sets server parameters
       baseDir: "app/", // sets the base directory
   }});
+}
+
+function validateHtml() {
+  return src(['app/*.html']) // finds and selects all html files
+    .pipe(htmlValidator.analyzer()) // analyzes html files
+    .pipe(htmlValidator.reporter()); // reports about errors
 }
 
 function styles() {
@@ -58,6 +64,7 @@ function images() {
 function watching() {
   watch(["app/scss/**/*.scss"], styles); // calls the styles function when scss files change in app/scss directory
   watch(["app/js/main.js"], scripts); // calls the scripts function when main.js file change in app/js directory
+  watch(["app/*.html"], validateHtml); // calls the scripts function when main.js file change in app/js directory
   watch(["app/*.html"]).on("change", browserSync.reload); // refreshes the browser page when HTML files change
 }
 
@@ -82,6 +89,7 @@ exports.initBrowserSync = initBrowserSync;
 exports.scripts = scripts;
 exports.images = images;
 exports.cleanDist = cleanDist;
+exports.validateHtml = validateHtml;
 
 // adds the ability to use the function by "gulp" keyword (gulp)
 exports.default = parallel(scripts, initBrowserSync, watching); // calls functions in parallel
