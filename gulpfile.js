@@ -34,7 +34,6 @@ function styles() {
     }))
     .pipe(concat("style.min.css")) // concatenates the files and sets the filename
     .pipe(autoprefixer({ // adds css prefixes for old browsers
-        grid: "autoplace", // adds IE 10-11 prefixes for grid layout properties
         overrideBrowserslist: ["last 10 version"], // adds css prefixes for the latest 10 versions in every browser
     }))
     .pipe(dest("app/css")) // sends file to app/css directory
@@ -63,7 +62,7 @@ function images() {
 
 function watching() {
   watch(["app/scss/**/*.scss"], styles); // calls the styles function when scss files change in app/scss directory
-  watch(["app/js/main.js"], scripts); // calls the scripts function when main.js file change in app/js directory
+  watch(["app/js/main.js", "!app/js/script.min.js"], scripts); // calls the scripts function when main.js file change in app/js directory
   watch(["app/*.html"], validateHtml); // calls the scripts function when main.js file change in app/js directory
   watch(["app/*.html"]).on("change", browserSync.reload); // refreshes the browser page when HTML files change
 }
